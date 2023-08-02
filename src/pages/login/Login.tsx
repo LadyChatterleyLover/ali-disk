@@ -36,32 +36,47 @@ const Login = () => {
           localSet('disk-user', res.data.user)
           navigate('/')
           ipcRenderer.invoke('resizeWindow')
+        } else {
+          message.error(res.msg)
         }
       })
   }
 
   return (
-    <div className='h-full bg-[#ecefff] p-[50px] flex flex-col items-center'>
-      <div className='mb-5'>
-        <img src={Logo} width={260} height={60} alt='' />
+    <div className="h-full bg-[#ecefff] p-[50px] flex flex-col items-center">
+      <div className="mb-5">
+        <img
+          src={Logo}
+          width={260}
+          height={60}
+          alt=""
+        />
       </div>
-      <div className='bg-white p-5'>
-        <Form form={form} style={{ width: 300 }} autoComplete='off'>
-          <Form.Item<FieldType> name='username'>
-            <Input placeholder='请输入用户名' size='large' />
+      <div className="bg-white p-5">
+        <Form
+          form={form}
+          style={{ width: 300 }}
+          autoComplete="off">
+          <Form.Item<FieldType> name="username">
+            <Input
+              placeholder="请输入用户名"
+              size="large"
+            />
           </Form.Item>
 
-          <Form.Item<FieldType> name='password'>
-            <Input.Password placeholder='请输入密码' size='large' />
+          <Form.Item<FieldType> name="password">
+            <Input.Password
+              placeholder="请输入密码"
+              size="large"
+            />
           </Form.Item>
 
           <Form.Item>
             <Button
-              className='bg-gradient-to-r from-[#4870FF] via-[#6181FF] to-[#8198FF] py-5 flex items-center justify-center text-base'
-              type='primary'
+              className="bg-gradient-to-r from-[#4870FF] via-[#6181FF] to-[#8198FF] py-5 flex items-center justify-center text-base"
+              type="primary"
               block
-              onClick={login}
-            >
+              onClick={login}>
               登录
             </Button>
           </Form.Item>

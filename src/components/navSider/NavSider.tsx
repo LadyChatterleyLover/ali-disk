@@ -5,6 +5,7 @@ import {
   DeleteOutlined,
   FileImageOutlined,
   FileOutlined,
+  FileTextOutlined,
   HeartOutlined,
   TabletOutlined,
 } from '@ant-design/icons'
@@ -35,7 +36,8 @@ const NavSider = () => {
 
   const items: MenuItem[] = [
     getItem('文件', 'file', <FileOutlined />, [
-      getItem('最常使用', '/', <ClockCircleOutlined />),
+      getItem('列表', '/', <FileTextOutlined />),
+      getItem('最常使用', '/commonly', <ClockCircleOutlined />),
       getItem('我的资料', '/information', <CopyOutlined />),
     ]),
     getItem('相册', '/album', <FileImageOutlined />),
@@ -47,10 +49,10 @@ const NavSider = () => {
 
   return (
     <Menu
-      className='h-full bg-[#F5F5F6]'
+      className="h-full bg-[#F5F5F6]"
       defaultSelectedKeys={['/']}
       defaultOpenKeys={['file']}
-      mode='inline'
+      mode="inline"
       items={items}
       onClick={({ key }) => {
         navigate(key)

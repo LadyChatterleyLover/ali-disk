@@ -10,6 +10,7 @@ import Collect from './pages/collect/Collect'
 import Password from './pages/password/Password'
 import Subscribe from './pages/subscribe/Subscribe'
 import Recycle from './pages/recycle/Recycle'
+import Commonly from './pages/commonly/Commonly'
 
 const Routes = () => {
   const routes = useRoutes([
@@ -28,6 +29,10 @@ const Routes = () => {
         {
           path: '/information',
           element: <Information />,
+        },
+        {
+          path: '/commonly',
+          element: <Commonly />,
         },
         {
           path: '/album',

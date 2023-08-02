@@ -104,8 +104,8 @@ app.on('activate', () => {
 ipcMain.handle('resizeWindow', () => {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize
   if (win) {
-    win.setSize(1600, 1200)
+    win.setSize(1300, 1000)
     win.setResizable(true)
-    win.setPosition(Math.floor((width - 1600) / 2), Math.floor((height - 1200) / 2))
+    win.setPosition(Math.floor((width - 1300) / 2), Math.floor((height - 1000) / 2))
   }
 })
