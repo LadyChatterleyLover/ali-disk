@@ -5,7 +5,7 @@ export interface FileItem {
   name: string
   ext: string
   url: string
-  isDir: boolean
+  isDir: number
   dirId?: number
   size: number
   createAt: string
