@@ -20,17 +20,20 @@
   },
   "dependencies": {
     "-": "^0.0.1",
+    "@ant-design/icons": "^5.2.3",
     "@commitlint/cli": "^17.6.7",
     "@commitlint/config-conventional": "^17.6.7",
     "D": "^1.0.0",
     "antd": "^5.8.0",
     "cz-customizable": "^7.0.0",
-    "electron-updater": "^5.3.0"
+    "electron-updater": "^5.3.0",
+    "react-router-dom": "^6.14.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.32.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.14",
     "cz-conventional-changelog-zh": "^0.0.2",
