@@ -7,8 +7,8 @@ import {
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Layout, Menu, theme } from 'antd'
-import React from 'react'
-import { Outlet } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Outlet, redirect, useNavigate } from 'react-router-dom'
 
 const { Content, Sider } = Layout
 
@@ -41,6 +41,15 @@ const items: MenuItem[] = [
 ]
 
 const Layouts = () => {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const user = localStorage.getItem('disk-user')
+    if (!user) {
+      navigate('/login')
+    }
+  }, [])
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider>
