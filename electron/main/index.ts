@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, Tray, ipcMain, Menu } from 'electron'
+import { app, BrowserWindow, shell, Tray, ipcMain, Menu, screen } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
 import { update } from './update'
@@ -30,8 +30,9 @@ async function createWindow() {
   win = new BrowserWindow({
     title: '嘟嘟网盘',
     icon: join(process.env.PUBLIC, 'favicon.ico'),
-    width: 1400,
-    height: 1000,
+    width: 500,
+    height: 650,
+    resizable: false,
     webPreferences: {
       preload,
       nodeIntegration: true,
@@ -97,5 +98,14 @@ app.on('activate', () => {
     allWindows[0].focus()
   } else {
     createWindow()
+  }
+})
+
+ipcMain.handle('resizeWindow', () => {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
+  if (win) {
+    win.setSize(1600, 1200)
+    win.setResizable(true)
+    win.setPosition(Math.floor((width - 1600) / 2), Math.floor((height - 1200) / 2))
   }
 })

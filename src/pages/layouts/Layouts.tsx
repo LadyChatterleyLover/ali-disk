@@ -7,6 +7,7 @@ import {
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Layout, Menu, theme } from 'antd'
+import { ipcRenderer } from 'electron'
 import React, { useEffect } from 'react'
 import { Outlet, redirect, useNavigate } from 'react-router-dom'
 
@@ -47,6 +48,8 @@ const Layouts = () => {
     const user = localStorage.getItem('disk-user')
     if (!user) {
       navigate('/login')
+    } else {
+      ipcRenderer.invoke('resizeWindow')
     }
   }, [])
 
