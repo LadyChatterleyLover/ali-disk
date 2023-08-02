@@ -4,6 +4,12 @@ import Layouts from './pages/layouts/Layouts'
 import { BrowserRouter, useRoutes } from 'react-router-dom'
 import File from './pages/file/File'
 import Login from './pages/login/Login'
+import Information from './pages/information/Information'
+import Album from './pages/album/Album'
+import Collect from './pages/collect/Collect'
+import Password from './pages/password/Password'
+import Subscribe from './pages/subscribe/Subscribe'
+import Recycle from './pages/recycle/Recycle'
 
 const Routes = () => {
   const routes = useRoutes([
@@ -18,6 +24,30 @@ const Routes = () => {
         {
           path: '/',
           element: <File />,
+        },
+        {
+          path: '/information',
+          element: <Information />,
+        },
+        {
+          path: '/album',
+          element: <Album />,
+        },
+        {
+          path: '/collect',
+          element: <Collect />,
+        },
+        {
+          path: '/password',
+          element: <Password />,
+        },
+        {
+          path: '/subscribe',
+          element: <Subscribe />,
+        },
+        {
+          path: '/recycle',
+          element: <Recycle />,
         },
       ],
     },
