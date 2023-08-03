@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom/client'
+import 'animate.css'
 import App from './App'
 import './index.css'
 

@@ -12,7 +12,6 @@ interface Props {
 
 const FileEmpty = (props: Props) => {
   const { getFileList, dirId } = props
-
   const [addDirVisible, setAddDirVisible] = useState(false)
 
   const uploadProps: UploadProps = {
