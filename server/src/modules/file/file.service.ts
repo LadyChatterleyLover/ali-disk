@@ -9,6 +9,7 @@ import { generateRandomCode, generateUUID } from 'src/utils/generate'
 import { UploadGateway } from '../gateway/upload.gateway'
 import * as fs from 'node:fs'
 import * as path from 'node:path'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const dayjs = require('dayjs')
 
 const host = 'http://localhost:5173/share'

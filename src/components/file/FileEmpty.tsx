@@ -1,5 +1,7 @@
 import api from '@/api'
-import { Upload, UploadProps, message } from 'antd'
+import { Modal, Upload, UploadProps, message } from 'antd'
+import { useState } from 'react'
+import AddDir from './AddDir'
 
 const { Dragger } = Upload
 
@@ -9,6 +11,9 @@ interface Props {
 
 const FileEmpty = (props: Props) => {
   const { getFileList } = props
+
+  const [addDirVisible, setAddDirVisible] = useState(false)
+
   const uploadProps: UploadProps = {
     name: 'file',
     action: '',
@@ -43,7 +48,10 @@ const FileEmpty = (props: Props) => {
       </Dragger>
       <div className='text-xs text-[#25262b5b] mb-7'>或者</div>
       <div className='flex'>
-        <div className='relative overflow-hidden w-[106px] h-[120px] rounded-lg cursor-pointer text-sm pt-5 text-center text-[#25262bb7] bg-[#84858d14] mr-6'>
+        <div
+          className='relative overflow-hidden w-[106px] h-[120px] rounded-lg cursor-pointer text-sm pt-5 text-center text-[#25262bb7] bg-[#84858d14] mr-6'
+          onClick={() => setAddDirVisible(true)}
+        >
           <span>新建文件夹</span>
           <img
             className='absolute top-[69px] left-[34px] w-[72px] h-[72px]'
@@ -68,6 +76,12 @@ const FileEmpty = (props: Props) => {
           ></img>
         </div>
       </div>
+
+      <AddDir
+        visible={addDirVisible}
+        setVisible={setAddDirVisible}
+        getFileList={getFileList}
+      ></AddDir>
     </div>
   )
 }

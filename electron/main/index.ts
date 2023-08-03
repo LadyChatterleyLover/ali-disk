@@ -62,6 +62,32 @@ async function createWindow() {
   })
 
   update(win)
+
+  const template = [
+    {
+      label: '重新加载',
+      accelerator: 'ctrl+r', //快捷键
+      click() {
+        win?.reload()
+      },
+    },
+    {
+      label: '控制台',
+      click() {
+        const isDevToolsOpened = win?.webContents.isDevToolsOpened()
+        if (isDevToolsOpened) {
+          win?.webContents.closeDevTools()
+        } else {
+          win?.webContents.openDevTools()
+        }
+      },
+    },
+  ]
+  const contextMenu = Menu.buildFromTemplate(template)
+  win?.webContents.on('context-menu', () => {
+    contextMenu.popup()
+  })
+
   const iconPath = path.resolve(process.cwd(), 'src/assets/cloud.png')
   const appTray = new Tray(iconPath)
   appTray.setToolTip('嘟嘟网盘')

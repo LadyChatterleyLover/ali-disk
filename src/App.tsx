@@ -92,7 +92,7 @@ const Routes = () => {
 
 const App = () => {
   return (
-    <ConfigProvider locale={zh_CN}>
+    <ConfigProvider locale={zh_CN} theme={{ token: { colorPrimary: '#637dff' } }}>
       <BrowserRouter>
         <Routes />
       </BrowserRouter>
