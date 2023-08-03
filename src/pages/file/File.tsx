@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { FileItem } from '@/types/file'
 import api from '@/api'
 import FileList from '@/components/file/FileList'
+import FileEmpty from '@/components/file/FileEmpty'
+import ActionButton from '@/components/file/ActionButton'
 
 const File = () => {
   const [fileList, setFileList] = useState<FileItem[]>([])
@@ -20,7 +22,12 @@ const File = () => {
   useEffect(() => {
     getFileList()
   }, [])
-  return <div>{fileList.length ? <FileList fileList={fileList} /> : null}</div>
+  return (
+    <div className='h-full'>
+      {fileList.length ? <FileList fileList={fileList} /> : <FileEmpty getFileList={getFileList} />}
+      <ActionButton />
+    </div>
+  )
 }
 
 export default File

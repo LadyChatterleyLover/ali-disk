@@ -151,10 +151,14 @@ const NavSider = () => {
           )
         })}
       </div>
-      <div className='w-[170px] flex flex-col items-center pt-6'>
+      <div
+        className='w-[170px] flex flex-col items-center pt-6'
+        style={{ borderRight: '1px solid #eee' }}
+      >
         {currentItem.children?.map((item, index) => {
           return (
             <div
+              key={index}
               className='flex w-[140px] h-10 pl-2 leading-[14px] cursor-pointer items-center text-[#25262b] mb-3'
               style={{ background: currentChildIndex === index ? '#84858d28' : '' }}
               onClick={() => {

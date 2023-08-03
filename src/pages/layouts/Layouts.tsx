@@ -24,7 +24,7 @@ const Layouts = () => {
         <NavSider />
       </Sider>
       <Layout>
-        <Content style={{ margin: '0 16px' }}>
+        <Content style={{ background: '#fff', padding: 20 }}>
           <Outlet />
         </Content>
       </Layout>
