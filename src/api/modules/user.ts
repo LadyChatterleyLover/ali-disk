@@ -2,7 +2,7 @@ import { get, post } from '../request'
 import type { UserInfo } from '@/types/user'
 
 export default {
-  register(params: { username: string; password: string; email: string }) {
+  register(params: { username: string; password: string }) {
     return post<{
       token: string
       user: UserInfo

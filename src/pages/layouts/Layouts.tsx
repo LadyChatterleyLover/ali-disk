@@ -1,4 +1,4 @@
-import { Layout } from 'antd'
+import { App, Layout } from 'antd'
 import { ipcRenderer } from 'electron'
 import { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
@@ -14,21 +14,23 @@ const Layouts = () => {
     if (!user) {
       navigate('/login')
     } else {
-      ipcRenderer.invoke('resizeWindow')
+      ipcRenderer.invoke('resizeWindow', 1300, 1000)
     }
   }, [])
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider width={248} theme='light'>
-        <NavSider />
-      </Sider>
-      <Layout>
-        <Content style={{ background: '#fff', padding: 20 }}>
-          <Outlet />
-        </Content>
+    <App>
+      <Layout style={{ minHeight: '100vh' }}>
+        <Sider width={248} theme='light'>
+          <NavSider />
+        </Sider>
+        <Layout>
+          <Content style={{ background: '#fff', padding: 20 }}>
+            <Outlet />
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </App>
   )
 }
 
