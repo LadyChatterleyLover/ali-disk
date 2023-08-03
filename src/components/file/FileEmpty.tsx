@@ -7,10 +7,11 @@ const { Dragger } = Upload
 
 interface Props {
   getFileList: () => void
+  dirId?: number
 }
 
 const FileEmpty = (props: Props) => {
-  const { getFileList } = props
+  const { getFileList, dirId } = props
 
   const [addDirVisible, setAddDirVisible] = useState(false)
 
@@ -25,6 +26,7 @@ const FileEmpty = (props: Props) => {
       if (status !== 'uploading') {
         const formData = new FormData()
         formData.append('file', info.file as any)
+        formData.append('dirId', dirId ? String(dirId) : '')
         api.file.uploadFile(formData).then(res => {
           if (res.code === 200) {
             message.success(res.msg)
@@ -59,22 +61,26 @@ const FileEmpty = (props: Props) => {
             alt='新建文件夹'
           ></img>
         </div>
-        <div className='relative overflow-hidden w-[106px] h-[120px] rounded-lg cursor-pointer text-sm pt-5 text-center text-[#25262bb7] bg-[#84858d14] mr-6'>
-          <span>上传文件</span>
-          <img
-            className='absolute top-[69px] left-[34px] w-[72px] h-[72px]'
-            src='https://img.alicdn.com/imgextra/i4/O1CN01Ojh9qS1rrJtSy0dN4_!!6000000005684-2-tps-224-224.png'
-            alt='上传文件'
-          ></img>
-        </div>
-        <div className='relative overflow-hidden w-[106px] h-[120px]  rounded-lg cursor-pointer text-sm pt-5 text-center text-[#25262bb7] bg-[#84858d14] mr-6'>
-          <span>上传文件夹</span>
-          <img
-            className='absolute top-[69px] left-[34px] w-[72px] h-[72px]'
-            src='https://img.alicdn.com/imgextra/i3/O1CN01ZN75Oi21TBCK21ubJ_!!6000000006985-2-tps-224-224.png'
-            alt='上传文件夹'
-          ></img>
-        </div>
+        <Upload {...uploadProps} showUploadList={false}>
+          <div className='relative overflow-hidden w-[106px] h-[120px] rounded-lg cursor-pointer text-sm pt-5 text-center text-[#25262bb7] bg-[#84858d14] mr-6'>
+            <span>上传文件</span>
+            <img
+              className='absolute top-[69px] left-[34px] w-[72px] h-[72px]'
+              src='https://img.alicdn.com/imgextra/i4/O1CN01Ojh9qS1rrJtSy0dN4_!!6000000005684-2-tps-224-224.png'
+              alt='上传文件'
+            ></img>
+          </div>
+        </Upload>
+        <Upload {...uploadProps} showUploadList={false} directory>
+          <div className='relative overflow-hidden w-[106px] h-[120px]  rounded-lg cursor-pointer text-sm pt-5 text-center text-[#25262bb7] bg-[#84858d14] mr-6'>
+            <span>上传文件夹</span>
+            <img
+              className='absolute top-[69px] left-[34px] w-[72px] h-[72px]'
+              src='https://img.alicdn.com/imgextra/i3/O1CN01ZN75Oi21TBCK21ubJ_!!6000000006985-2-tps-224-224.png'
+              alt='上传文件夹'
+            ></img>
+          </div>
+        </Upload>
       </div>
 
       <AddDir
