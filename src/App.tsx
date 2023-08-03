@@ -11,6 +11,11 @@ import Password from './pages/password/Password'
 import Subscribe from './pages/subscribe/Subscribe'
 import Recycle from './pages/recycle/Recycle'
 import Commonly from './pages/commonly/Commonly'
+import AllPic from './pages/allPic/AllPic'
+import Share from './pages/share/Share'
+import QuickUpload from './pages/quickUpload/QuickUpload'
+import UploadFile from './pages/uploadFile/UploadFile'
+import DownloadFile from './pages/downloadFile/DownloadFile'
 
 const Routes = () => {
   const routes = useRoutes([
@@ -39,6 +44,10 @@ const Routes = () => {
           element: <Album />,
         },
         {
+          path: '/allPic',
+          element: <AllPic />,
+        },
+        {
           path: '/collect',
           element: <Collect />,
         },
@@ -53,6 +62,26 @@ const Routes = () => {
         {
           path: '/recycle',
           element: <Recycle />,
+        },
+        {
+          path: '/share',
+          element: <Share />,
+        },
+        {
+          path: '/quickUpload',
+          element: <QuickUpload />,
+        },
+        {
+          path: '/uploadFile',
+          element: <UploadFile />,
+        },
+        {
+          path: '/downloadFile',
+          element: <DownloadFile />,
+        },
+        {
+          path: '/quickUpload',
+          element: <QuickUpload />,
         },
       ],
     },

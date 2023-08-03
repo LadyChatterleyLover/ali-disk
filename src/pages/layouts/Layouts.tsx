@@ -1,13 +1,10 @@
-import type { MenuProps } from 'antd'
-import { Layout, Menu, theme } from 'antd'
+import { Layout } from 'antd'
 import { ipcRenderer } from 'electron'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
-import NavSider from '../../components/navSider/NavSider'
+import NavSider from '@/components/navSider/NavSider'
 
 const { Content, Sider } = Layout
-
-type MenuItem = Required<MenuProps>['items'][number]
 
 const Layouts = () => {
   const navigate = useNavigate()
@@ -23,7 +20,7 @@ const Layouts = () => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider style={{ background: '#F5F5F6' }}>
+      <Sider width={248} theme='light'>
         <NavSider />
       </Sider>
       <Layout>
