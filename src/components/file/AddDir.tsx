@@ -54,6 +54,7 @@ const AddDir = (props: Props) => {
         />
         <Input
           className='mt-12 mb-5 bg-[#ebebed]'
+          allowClear
           value={value}
           onChange={e => setValue(e.target.value)}
         />
