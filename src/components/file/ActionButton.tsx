@@ -1,7 +1,7 @@
 import { FileAddOutlined, FolderAddOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
-import { Popover, Upload, UploadProps, message } from 'antd'
+import { Popover, Upload, UploadFile, UploadProps, message } from 'antd'
 import AddDir from './AddDir'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import api from '@/api'
 
 interface Props {
@@ -13,6 +13,7 @@ const ActionButton = (props: Props) => {
   const { dirId, getFileList } = props
   const [visible, setVisible] = useState(false)
   const [open, setOpen] = useState(false)
+  const [uploadFileList, setUploadFileList] = useState<UploadFile[]>([])
 
   const uploadProps: UploadProps = {
     name: 'file',
@@ -38,6 +39,16 @@ const ActionButton = (props: Props) => {
     },
   }
 
+  const uploadProps1: UploadProps = {
+    name: 'file',
+    action: '',
+    beforeUpload(file) {
+      uploadFileList.push(file)
+      setUploadFileList([...uploadFileList])
+      return false
+    },
+  }
+
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen)
   }
@@ -55,7 +66,7 @@ const ActionButton = (props: Props) => {
           </Upload>
         </div>
         <div onClick={() => setOpen(false)}>
-          <Upload {...uploadProps} showUploadList={false} directory>
+          <Upload {...uploadProps1} showUploadList={false} directory>
             <div className='flex items-center text-[#25262b] mb-3 cursor-pointer'>
               <UploadOutlined />
               <div className='ml-3'>上传文件夹</div>
@@ -75,6 +86,47 @@ const ActionButton = (props: Props) => {
       </div>
     )
   }
+
+  useEffect(() => {
+    if (uploadFileList.length) {
+      const path: string = (uploadFileList[0] as any).path.replaceAll('\\', '/')
+      const arr = path.split('/')
+      const dirName = arr[arr.length - 2]
+      api.file
+        .createDir({
+          name: dirName,
+        })
+        .then(res => {
+          if (res.code === 200) {
+            const dirId = res.data.id
+            const uploadArr: Promise<any>[] = []
+            uploadFileList.forEach(item => {
+              const formData = new FormData()
+              formData.append('file', item as any)
+              formData.append('dirId', String(dirId))
+              const request = api.file.uploadFile(formData)
+              uploadArr.push(request)
+            })
+            Promise.all(uploadArr)
+              .then(res => {
+                if (res.length) {
+                  message.success('上传成功')
+                  getFileList?.()
+                  setUploadFileList([])
+                } else {
+                  setUploadFileList([])
+                }
+              })
+              .catch(() => {
+                message.error('上传失败')
+                setUploadFileList([])
+              })
+          } else {
+            message.error(res.msg)
+          }
+        })
+    }
+  }, [uploadFileList])
 
   return (
     <>

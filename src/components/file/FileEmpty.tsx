@@ -1,6 +1,6 @@
 import api from '@/api'
-import { Modal, Upload, UploadProps, message } from 'antd'
-import { useState } from 'react'
+import { Modal, Upload, UploadFile, UploadProps, message } from 'antd'
+import { useEffect, useState } from 'react'
 import AddDir from './AddDir'
 
 const { Dragger } = Upload
@@ -13,6 +13,7 @@ interface Props {
 const FileEmpty = (props: Props) => {
   const { getFileList, dirId } = props
   const [addDirVisible, setAddDirVisible] = useState(false)
+  const [uploadFileList, setUploadFileList] = useState<UploadFile[]>([])
 
   const uploadProps: UploadProps = {
     name: 'file',
@@ -37,6 +38,57 @@ const FileEmpty = (props: Props) => {
       }
     },
   }
+
+  const uploadProps1: UploadProps = {
+    name: 'file',
+    action: '',
+    beforeUpload(file) {
+      uploadFileList.push(file)
+      setUploadFileList([...uploadFileList])
+      return false
+    },
+  }
+
+  useEffect(() => {
+    if (uploadFileList.length) {
+      const path: string = (uploadFileList[0] as any).path.replaceAll('\\', '/')
+      const arr = path.split('/')
+      const dirName = arr[arr.length - 2]
+      api.file
+        .createDir({
+          name: dirName,
+        })
+        .then(res => {
+          if (res.code === 200) {
+            const dirId = res.data.id
+            const uploadArr: Promise<any>[] = []
+            uploadFileList.forEach(item => {
+              const formData = new FormData()
+              formData.append('file', item as any)
+              formData.append('dirId', String(dirId))
+              const request = api.file.uploadFile(formData)
+              uploadArr.push(request)
+            })
+            Promise.all(uploadArr)
+              .then(res => {
+                if (res.length) {
+                  message.success('上传成功')
+                  getFileList?.()
+                  setUploadFileList([])
+                } else {
+                  setUploadFileList([])
+                }
+              })
+              .catch(() => {
+                message.error('上传失败')
+                setUploadFileList([])
+              })
+          } else {
+            message.error(res.msg)
+          }
+        })
+    }
+  }, [uploadFileList])
 
   return (
     <div className='w-full h-full flex flex-col justify-center items-center'>
@@ -70,7 +122,7 @@ const FileEmpty = (props: Props) => {
             ></img>
           </div>
         </Upload>
-        <Upload {...uploadProps} showUploadList={false} directory>
+        <Upload {...uploadProps1} showUploadList={false} directory>
           <div className='relative overflow-hidden w-[106px] h-[120px]  rounded-lg cursor-pointer text-sm pt-5 text-center text-[#25262bb7] bg-[#84858d14] mr-6'>
             <span>上传文件夹</span>
             <img

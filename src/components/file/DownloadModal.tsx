@@ -19,10 +19,13 @@ const DownloadModal = (props: Props) => {
   }
 
   const confirm = () => {
-    ipcRenderer.send('download', {
-      url: item.url,
-      directoryPath: downloadPath,
-    })
+    if (item.isDir) {
+    } else {
+      ipcRenderer.send('download', {
+        url: item.url,
+        directoryPath: downloadPath,
+      })
+    }
   }
 
   const setDefaultPath = (e: CheckboxChangeEvent) => {
