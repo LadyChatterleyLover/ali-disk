@@ -29,6 +29,9 @@ export class File {
   isDir: number
 
   @Column({ default: 0 })
+  isCollection: number
+
+  @Column({ default: 0 })
   isRecovery: number
 
   @Column({ default: 0 })

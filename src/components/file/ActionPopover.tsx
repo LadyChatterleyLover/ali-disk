@@ -10,8 +10,9 @@ import {
 import { Modal, Tooltip, message } from 'antd'
 import DownloadModal from './DownloadModal'
 import { FileItem } from '@/types/file'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import api from '@/api'
+import { cloneDeep } from 'lodash-es'
 
 interface Props {
   currentItem: FileItem
@@ -23,6 +24,8 @@ interface Props {
 
 const ActionPopover = (props: Props) => {
   const { currentItem, show, show1, cancelCheck, getFileList } = props
+
+  const [cloneCurrentItem, setCloneCurrentIten] = useState<FileItem>(currentItem)
   const [visible, setVisible] = useState(false)
   const [modal, contextHolder] = Modal.useModal()
 
@@ -31,7 +34,6 @@ const ActionPopover = (props: Props) => {
   }
 
   const delFile = () => {
-    console.log(111)
     modal.confirm({
       title: '删除文件',
       content: '删除的文件可在回收站查看',
@@ -41,11 +43,11 @@ const ActionPopover = (props: Props) => {
       },
       cancelText: '取消',
       onOk() {
-        api.file.recoveryFile([currentItem!.id as number]).then(res => {
+        api.file.recoveryFile([cloneCurrentItem!.id as number]).then(res => {
           if (res.code === 200) {
             message.success(res.msg)
             getFileList?.({
-              dirId: currentItem?.id,
+              dirId: cloneCurrentItem?.id,
             })
           } else {
             message.error(res.msg)
@@ -54,6 +56,26 @@ const ActionPopover = (props: Props) => {
       },
     })
   }
+
+  const collection = () => {
+    cloneCurrentItem.isCollection = cloneCurrentItem?.isCollection === 0 ? 1 : 0
+    setCloneCurrentIten({ ...cloneCurrentItem })
+    api.file
+      .updateFile({
+        isCollection: cloneCurrentItem!.isCollection,
+      })
+      .then(res => {
+        if (res.code === 200) {
+          getFileList()
+        } else {
+          message.error(res.msg)
+        }
+      })
+  }
+
+  useEffect(() => {
+    setCloneCurrentIten(cloneDeep(currentItem))
+  }, [currentItem])
 
   return (
     <>
@@ -79,9 +101,11 @@ const ActionPopover = (props: Props) => {
               <DownloadOutlined />
             </Tooltip>
           </div>
-          <div className='cursor-pointer'>
+          <div className='cursor-pointer' onClick={collection}>
             <Tooltip title='收藏' arrow={false}>
-              <HeartOutlined />
+              <HeartOutlined
+                style={{ background: cloneCurrentItem?.isCollection === 0 ? '' : 'red' }}
+              />
             </Tooltip>
           </div>
           <div className='cursor-pointer' onClick={delFile}>

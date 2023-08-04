@@ -14,6 +14,7 @@ export interface FileItem {
   isAdd: boolean
   isRename: boolean
   isShared: number
+  isCollection: number
   shareUrl: string
   extractedCode: string
   viewCount: number
