@@ -1,3 +1,4 @@
+import api from '@/api'
 import { FileItem } from '@/types/file'
 import { Button, Checkbox, Input, Modal, message } from 'antd'
 import { CheckboxChangeEvent } from 'antd/es/checkbox'
@@ -20,6 +21,17 @@ const DownloadModal = (props: Props) => {
 
   const confirm = () => {
     if (item.isDir) {
+      api.file
+        .getFileList({
+          dirId: item.id,
+        })
+        .then(res => {
+          const path = downloadPath + `\\${item.name}`
+          ipcRenderer.send('donwloadDir', {
+            path,
+            fileList: res.data,
+          })
+        })
     } else {
       ipcRenderer.send('download', {
         url: item.url,
@@ -44,6 +56,10 @@ const DownloadModal = (props: Props) => {
       setDownloadPath(path)
     })
     ipcRenderer.on('downloadSuccess', (_, path) => {
+      message.success('下载成功')
+      close()
+    })
+    ipcRenderer.on('donwloadDirSuccess', (_, path) => {
       message.success('下载成功')
       close()
     })

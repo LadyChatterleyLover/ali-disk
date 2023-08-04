@@ -1,8 +1,10 @@
-import { app, BrowserWindow, shell, Tray, ipcMain, Menu, screen } from 'electron'
+import { app, BrowserWindow, shell, Tray, ipcMain, Menu } from 'electron'
+import path from 'node:path'
+import * as fs from 'node:fs'
+import axios from 'axios'
 import { release } from 'node:os'
 import { join } from 'node:path'
 import { update } from './update'
-import path from 'node:path'
 import { downloadFile } from './download'
 import { selectDirectory } from './selectDirectory'
 import { resizeWindow } from './resizeWindow'
@@ -133,4 +135,18 @@ selectDirectory(win!)
 
 ipcMain.on('getAppPath', event => {
   event.reply('appPathResponse', app.getPath('downloads'))
+})
+
+ipcMain.on('donwloadDir', async (event, { path: folderPath, fileList }) => {
+  fs.mkdirSync(folderPath, { recursive: true })
+  for (const file of fileList) {
+    try {
+      const response = await axios.get(file.url, { responseType: 'arraybuffer' })
+      const filePath = path.join(folderPath, file.name)
+      fs.writeFileSync(filePath, Buffer.from(response.data))
+      event.reply('donwloadDirSuccess')
+    } catch (error) {
+      console.error(`文件 ${file.name} 下载失败：`, error)
+    }
+  }
 })
