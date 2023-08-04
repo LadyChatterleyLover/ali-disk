@@ -5,7 +5,6 @@ import {
   DownloadOutlined,
   EllipsisOutlined,
   ExportOutlined,
-  HeartOutlined,
 } from '@ant-design/icons'
 import { Modal, Tooltip, message } from 'antd'
 import DownloadModal from './DownloadModal'
@@ -13,6 +12,8 @@ import { FileItem } from '@/types/file'
 import { useEffect, useState } from 'react'
 import api from '@/api'
 import { cloneDeep } from 'lodash-es'
+import CcIcon from '../icon/CcIcon'
+import { Heart16Regular, Heart16Filled } from '@ricons/fluent'
 
 interface Props {
   currentItem: FileItem
@@ -83,43 +84,70 @@ const ActionPopover = (props: Props) => {
         className={`fixed  left-[45%] animate__animated animate__faster
     ${show ? 'animate__fadeInUp  bottom-[50px]' : 'bottom-[50px] animate__fadeOutDown'}
       ${show1 ? '' : 'hidden'}
-      `}
-      >
-        <div className='px-4 py-3 flex w-[340px] items-center justify-evenly rounded-lg bg-[#313136] text-white '>
-          <div className='cursor-pointer'>
-            <Tooltip title='快传' arrow={false}>
+      `}>
+        <div className="px-4 py-3 flex w-[340px] items-center justify-evenly rounded-lg bg-[#313136] text-white ">
+          <div className="cursor-pointer">
+            <Tooltip
+              title="快传"
+              arrow={false}>
               <CloudDownloadOutlined />
             </Tooltip>
           </div>
-          <div className='cursor-pointer'>
-            <Tooltip title='移至资源库' arrow={false}>
+          <div className="cursor-pointer">
+            <Tooltip
+              title="移至资源库"
+              arrow={false}>
               <ExportOutlined />
             </Tooltip>
           </div>
-          <div className='cursor-pointer' onClick={donwload}>
-            <Tooltip title='下载' arrow={false}>
+          <div
+            className="cursor-pointer"
+            onClick={donwload}>
+            <Tooltip
+              title="下载"
+              arrow={false}>
               <DownloadOutlined />
             </Tooltip>
           </div>
-          <div className='cursor-pointer' onClick={collection}>
-            <Tooltip title='收藏' arrow={false}>
-              <HeartOutlined
-                style={{ background: cloneCurrentItem?.isCollection === 0 ? '' : 'red' }}
-              />
+          <div
+            className="cursor-pointer relative top-[3px]"
+            onClick={collection}>
+            <Tooltip
+              title="收藏"
+              arrow={false}>
+              {cloneCurrentItem?.isCollection === 0 ? (
+                <CcIcon>
+                  <Heart16Regular />
+                </CcIcon>
+              ) : (
+                <CcIcon>
+                  <Heart16Filled color="red" />
+                </CcIcon>
+              )}
             </Tooltip>
           </div>
-          <div className='cursor-pointer' onClick={delFile}>
-            <Tooltip title='放入回收站' arrow={false}>
+          <div
+            className="cursor-pointer"
+            onClick={delFile}>
+            <Tooltip
+              title="放入回收站"
+              arrow={false}>
               <DeleteOutlined />
             </Tooltip>
           </div>
-          <div className='cursor-pointer'>
-            <Tooltip title='更多' arrow={false}>
+          <div className="cursor-pointer">
+            <Tooltip
+              title="更多"
+              arrow={false}>
               <EllipsisOutlined />
             </Tooltip>
           </div>
-          <div className='cursor-pointer' onClick={cancelCheck}>
-            <Tooltip title='取消多选' arrow={false}>
+          <div
+            className="cursor-pointer"
+            onClick={cancelCheck}>
+            <Tooltip
+              title="取消多选"
+              arrow={false}>
               <CloseCircleOutlined />
             </Tooltip>
           </div>
@@ -128,8 +156,7 @@ const ActionPopover = (props: Props) => {
       <DownloadModal
         item={currentItem}
         visible={visible}
-        close={() => setVisible(false)}
-      ></DownloadModal>
+        close={() => setVisible(false)}></DownloadModal>
       {contextHolder}
     </>
   )
