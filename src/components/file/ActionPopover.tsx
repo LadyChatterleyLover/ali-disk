@@ -7,25 +7,52 @@ import {
   ExportOutlined,
   HeartOutlined,
 } from '@ant-design/icons'
-import { Tooltip } from 'antd'
+import { Modal, Tooltip, message } from 'antd'
 import DownloadModal from './DownloadModal'
 import { FileItem } from '@/types/file'
 import { useState } from 'react'
+import api from '@/api'
 
 interface Props {
   currentItem: FileItem
   show: boolean
   show1: boolean
   cancelCheck: () => void
+  getFileList: (params?: any) => void
 }
 
 const ActionPopover = (props: Props) => {
-  const { currentItem, show, show1, cancelCheck } = props
-
+  const { currentItem, show, show1, cancelCheck, getFileList } = props
   const [visible, setVisible] = useState(false)
+  const [modal, contextHolder] = Modal.useModal()
 
   const donwload = () => {
     setVisible(true)
+  }
+
+  const delFile = () => {
+    console.log(111)
+    modal.confirm({
+      title: '删除文件',
+      content: '删除的文件可在回收站查看',
+      okText: '确定删除',
+      okButtonProps: {
+        danger: true,
+      },
+      cancelText: '取消',
+      onOk() {
+        api.file.recoveryFile([currentItem!.id as number]).then(res => {
+          if (res.code === 200) {
+            message.success(res.msg)
+            getFileList?.({
+              dirId: currentItem?.id,
+            })
+          } else {
+            message.error(res.msg)
+          }
+        })
+      },
+    })
   }
 
   return (
@@ -57,7 +84,7 @@ const ActionPopover = (props: Props) => {
               <HeartOutlined />
             </Tooltip>
           </div>
-          <div className='cursor-pointer'>
+          <div className='cursor-pointer' onClick={delFile}>
             <Tooltip title='放入回收站' arrow={false}>
               <DeleteOutlined />
             </Tooltip>
@@ -79,6 +106,7 @@ const ActionPopover = (props: Props) => {
         visible={visible}
         close={() => setVisible(false)}
       ></DownloadModal>
+      {contextHolder}
     </>
   )
 }

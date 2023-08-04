@@ -17,10 +17,11 @@ import ActionPopover from './ActionPopover'
 
 interface Props {
   fileList: FileItem[]
+  getFileList: () => void
 }
 
 const FileList = (props: Props) => {
-  const { fileList } = props
+  const { fileList, getFileList } = props
   const [cloneFileList, setCloneFileList] = useState<FileItem[]>([])
   const [selectAll, setSelectAll] = useState(false)
   const [selectList, setSelectList] = useState<FileItem[]>([])
@@ -306,6 +307,7 @@ const FileList = (props: Props) => {
         show1={show1}
         currentItem={currentItem!}
         cancelCheck={cancelCheck}
+        getFileList={getFileList}
       ></ActionPopover>
     </div>
   )

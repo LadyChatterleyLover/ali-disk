@@ -24,7 +24,11 @@ const File = () => {
   }, [])
   return (
     <div className='h-full'>
-      {fileList.length ? <FileList fileList={fileList} /> : <FileEmpty getFileList={getFileList} />}
+      {fileList.length ? (
+        <FileList fileList={fileList} getFileList={getFileList} />
+      ) : (
+        <FileEmpty getFileList={getFileList} />
+      )}
       <ActionButton getFileList={getFileList} />
     </div>
   )
