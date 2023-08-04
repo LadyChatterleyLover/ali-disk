@@ -3,6 +3,7 @@ import { release } from 'node:os'
 import { join } from 'node:path'
 import { update } from './update'
 import path from 'node:path'
+import { downloadFile } from './download'
 
 process.env.DIST_ELECTRON = join(__dirname, '../')
 process.env.DIST = join(process.env.DIST_ELECTRON, '../dist')
@@ -36,8 +37,6 @@ async function createWindow() {
     webPreferences: {
       preload,
       nodeIntegration: true,
-      webSecurity: false,
-      allowRunningInsecureContent: true,
       contextIsolation: false,
       webviewTag: true,
       spellcheck: false,
@@ -127,7 +126,13 @@ app.on('activate', () => {
   }
 })
 
-ipcMain.handle('resizeWindow', (e, winWidth?, winHeight?) => {
+// downloadFile()
+
+ipcMain.on('getAppPath', event => {
+  event.reply('appPathResponse', app.getPath('downloads'))
+})
+
+ipcMain.handle('resizeWindow', (_, winWidth?, winHeight?) => {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize
   if (win) {
     win.setSize(winWidth, winHeight)

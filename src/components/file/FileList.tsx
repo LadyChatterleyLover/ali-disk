@@ -11,17 +11,9 @@ import excelImg from '../../assets/excel.png'
 import docxImg from '../../assets/docx.png'
 import videoImg from '../../assets/video.png'
 import zipImg from '../../assets/zip.png'
-import {
-  CheckOutlined,
-  CloseCircleOutlined,
-  CloudDownloadOutlined,
-  DeleteOutlined,
-  DownloadOutlined,
-  EllipsisOutlined,
-  ExportOutlined,
-  HeartOutlined,
-  MinusOutlined,
-} from '@ant-design/icons'
+import { CheckOutlined, MinusOutlined } from '@ant-design/icons'
+import { ipcRenderer } from 'electron'
+import ActionPopover from './ActionPopover'
 
 interface Props {
   fileList: FileItem[]
@@ -309,50 +301,12 @@ const FileList = (props: Props) => {
         )}
       </div>
 
-      <div
-        className={`fixed  left-[45%] animate__animated animate__faster
-        ${show ? 'animate__fadeInUp  bottom-[50px]' : 'bottom-[50px] animate__fadeOutDown'}
-          ${show1 ? '' : 'hidden'}
-          `}
-      >
-        <div className='px-4 py-3 flex w-[340px] items-center justify-evenly rounded-lg bg-[#313136] text-white '>
-          <div className='cursor-pointer'>
-            <Tooltip title='快传' arrow={false}>
-              <CloudDownloadOutlined />
-            </Tooltip>
-          </div>
-          <div className='cursor-pointer'>
-            <Tooltip title='移至资源库' arrow={false}>
-              <ExportOutlined />
-            </Tooltip>
-          </div>
-          <div className='cursor-pointer'>
-            <Tooltip title='下载' arrow={false}>
-              <DownloadOutlined />
-            </Tooltip>
-          </div>
-          <div className='cursor-pointer'>
-            <Tooltip title='收藏' arrow={false}>
-              <HeartOutlined />
-            </Tooltip>
-          </div>
-          <div className='cursor-pointer'>
-            <Tooltip title='放入回收站' arrow={false}>
-              <DeleteOutlined />
-            </Tooltip>
-          </div>
-          <div className='cursor-pointer'>
-            <Tooltip title='更多' arrow={false}>
-              <EllipsisOutlined />
-            </Tooltip>
-          </div>
-          <div className='cursor-pointer' onClick={cancelCheck}>
-            <Tooltip title='取消多选' arrow={false}>
-              <CloseCircleOutlined />
-            </Tooltip>
-          </div>
-        </div>
-      </div>
+      <ActionPopover
+        show={show}
+        show1={show1}
+        currentItem={currentItem!}
+        cancelCheck={cancelCheck}
+      ></ActionPopover>
     </div>
   )
 }
