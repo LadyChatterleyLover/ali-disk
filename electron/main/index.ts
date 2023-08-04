@@ -8,6 +8,7 @@ import { update } from './update'
 import { downloadFile } from './download'
 import { selectDirectory } from './selectDirectory'
 import { resizeWindow } from './resizeWindow'
+import { donwloadDir } from './donwloadDir'
 
 process.env.DIST_ELECTRON = join(__dirname, '../')
 process.env.DIST = join(process.env.DIST_ELECTRON, '../dist')
@@ -131,22 +132,9 @@ app.on('activate', () => {
 })
 
 downloadFile()
+donwloadDir()
 selectDirectory(win!)
 
 ipcMain.on('getAppPath', event => {
   event.reply('appPathResponse', app.getPath('downloads'))
-})
-
-ipcMain.on('donwloadDir', async (event, { path: folderPath, fileList }) => {
-  fs.mkdirSync(folderPath, { recursive: true })
-  for (const file of fileList) {
-    try {
-      const response = await axios.get(file.url, { responseType: 'arraybuffer' })
-      const filePath = path.join(folderPath, file.name)
-      fs.writeFileSync(filePath, Buffer.from(response.data))
-      event.reply('donwloadDirSuccess')
-    } catch (error) {
-      console.error(`文件 ${file.name} 下载失败：`, error)
-    }
-  }
 })
