@@ -38,6 +38,7 @@ const AddDir = (props: Props) => {
     <Modal
       title='新建文件夹'
       width={340}
+      maskClosable={false}
       open={visible}
       onCancel={cancel}
       footer={

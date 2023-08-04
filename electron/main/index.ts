@@ -4,6 +4,8 @@ import { join } from 'node:path'
 import { update } from './update'
 import path from 'node:path'
 import { downloadFile } from './download'
+import { selectDirectory } from './selectDirectory'
+import { resizeWindow } from './resizeWindow'
 
 process.env.DIST_ELECTRON = join(__dirname, '../')
 process.env.DIST = join(process.env.DIST_ELECTRON, '../dist')
@@ -93,13 +95,13 @@ async function createWindow() {
 
   win?.on('close', event => {
     event.preventDefault()
-    // 隐藏窗口而不是退出应用
     win?.hide()
   })
 
   appTray.on('double-click', () => {
     win?.show()
   })
+  resizeWindow(win!)
 }
 
 app.whenReady().then(createWindow)
@@ -126,17 +128,9 @@ app.on('activate', () => {
   }
 })
 
-// downloadFile()
+downloadFile()
+selectDirectory(win!)
 
 ipcMain.on('getAppPath', event => {
   event.reply('appPathResponse', app.getPath('downloads'))
-})
-
-ipcMain.handle('resizeWindow', (_, winWidth?, winHeight?) => {
-  const { width, height } = screen.getPrimaryDisplay().workAreaSize
-  if (win) {
-    win.setSize(winWidth, winHeight)
-    win.setResizable(true)
-    win.setPosition(Math.floor((width - winWidth) / 2), Math.floor((height - winHeight) / 2))
-  }
 })

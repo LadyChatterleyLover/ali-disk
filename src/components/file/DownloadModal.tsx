@@ -1,6 +1,7 @@
 import { FileItem } from '@/types/file'
-import { Button, Input, Modal } from 'antd'
+import { Button, Input, Modal, message } from 'antd'
 import { ipcRenderer } from 'electron'
+import { download } from 'electron-dl'
 import { useEffect, useState } from 'react'
 interface Props {
   item: FileItem
@@ -12,6 +13,17 @@ const DownloadModal = (props: Props) => {
   const { item, visible, close } = props
   const [downloadPath, setDownloadPath] = useState('')
 
+  const updateDirectory = () => {
+    ipcRenderer.send('selectDirectory')
+  }
+
+  const confirm = () => {
+    ipcRenderer.send('download', {
+      url: item.url,
+      directoryPath: downloadPath,
+    })
+  }
+
   useEffect(() => {
     ipcRenderer.send('getAppPath')
   }, [])
@@ -19,6 +31,13 @@ const DownloadModal = (props: Props) => {
   useEffect(() => {
     ipcRenderer.on('appPathResponse', (_, path) => {
       setDownloadPath(path)
+    })
+    ipcRenderer.on('selectedDirectory', (_, path) => {
+      setDownloadPath(path)
+    })
+    ipcRenderer.on('downloadSuccess', (_, path) => {
+      message.success('下载成功')
+      close()
     })
     return () => {
       ipcRenderer.removeAllListeners('appPathResponse')
@@ -29,13 +48,15 @@ const DownloadModal = (props: Props) => {
     <Modal
       title={`下载 ${item?.name} 到`}
       open={visible}
+      maskClosable={false}
       closable={false}
       okButtonProps={{ type: 'primary' }}
       onCancel={close}
+      onOk={confirm}
     >
       <div className='flex'>
-        <Input defaultValue={downloadPath} readOnly></Input>
-        <Button type='link' className='text-[#637dff]'>
+        <Input value={downloadPath} readOnly></Input>
+        <Button type='link' className='text-[#637dff]' onClick={updateDirectory}>
           更改
         </Button>
       </div>
