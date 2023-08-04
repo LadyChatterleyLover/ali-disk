@@ -1,7 +1,7 @@
 import { FileItem } from '@/types/file'
-import { Button, Input, Modal, message } from 'antd'
+import { Button, Checkbox, Input, Modal, message } from 'antd'
+import { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { ipcRenderer } from 'electron'
-import { download } from 'electron-dl'
 import { useEffect, useState } from 'react'
 interface Props {
   item: FileItem
@@ -12,6 +12,7 @@ interface Props {
 const DownloadModal = (props: Props) => {
   const { item, visible, close } = props
   const [downloadPath, setDownloadPath] = useState('')
+  const [checked, setChecked] = useState(false)
 
   const updateDirectory = () => {
     ipcRenderer.send('selectDirectory')
@@ -22,6 +23,10 @@ const DownloadModal = (props: Props) => {
       url: item.url,
       directoryPath: downloadPath,
     })
+  }
+
+  const setDefaultPath = (e: CheckboxChangeEvent) => {
+    setChecked(e.target.checked)
   }
 
   useEffect(() => {
@@ -50,9 +55,21 @@ const DownloadModal = (props: Props) => {
       open={visible}
       maskClosable={false}
       closable={false}
-      okButtonProps={{ type: 'primary' }}
-      onCancel={close}
-      onOk={confirm}
+      footer={
+        <div className='flex items-center justify-between mt-6'>
+          <div>
+            <Checkbox checked={checked} onChange={e => setDefaultPath(e)}>
+              设为默认路径
+            </Checkbox>
+          </div>
+          <div className='flex'>
+            <Button onClick={close}>取消</Button>
+            <Button type='primary' onClick={confirm}>
+              确定
+            </Button>
+          </div>
+        </div>
+      }
     >
       <div className='flex'>
         <Input value={downloadPath} readOnly></Input>
