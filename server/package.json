@@ -44,6 +44,7 @@
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+    "sharp": "^0.32.4",
     "socket.io": "^4.7.1",
     "typeorm": "^0.3.17",
     "winston": "^3.9.0",

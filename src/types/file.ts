@@ -5,6 +5,8 @@ export interface FileItem {
   name: string
   ext: string
   url: string
+  width: number
+  height: number
   isDir: number
   dirId?: number
   size: number

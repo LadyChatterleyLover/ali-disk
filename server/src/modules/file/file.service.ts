@@ -9,6 +9,7 @@ import { generateRandomCode, generateUUID } from 'src/utils/generate'
 import { UploadGateway } from '../gateway/upload.gateway'
 import * as fs from 'node:fs'
 import * as path from 'node:path'
+import * as sharp from 'sharp'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dayjs = require('dayjs')
 
@@ -51,8 +52,12 @@ export class FileService {
   async upload(files: Express.Multer.File[], user_id: number, dirId = 0) {
     const file = files[0]
     const size = file.size
-    const ext = file.mimetype.split('/')[1]
+    const arr = file.originalname.split('/')
+    const ext = arr[arr.length - 1].split('.')[1]
     let type = ''
+    let fileWidth = 0
+    let fileHeight = 0
+
     let filename = decodeURI(escape(file.originalname))
     if (imgType.includes(ext.toLowerCase())) {
       type = 'image'
@@ -72,6 +77,7 @@ export class FileService {
     const existFiles = await this.fileRepository.find({
       where: {
         name: filename,
+        dirId: dirId,
       },
     })
     if (existFiles.length) {
@@ -99,6 +105,12 @@ export class FileService {
       ...user,
       remainingMemory: String(remainingMemory),
     }
+    if (imgType.includes(ext)) {
+      const image = sharp(file.buffer)
+      const { width, height } = await image.metadata()
+      fileWidth = width
+      fileHeight = height
+    }
     await this.userRepository.save(newUser)
     const res = await this.fileRepository.save({
       name: filename,
@@ -108,6 +120,8 @@ export class FileService {
       user: newUser,
       dirId: dirId || 0,
       type,
+      width: fileWidth,
+      height: fileHeight,
     })
     if (res) {
       return {
@@ -151,6 +165,16 @@ export class FileService {
       return (result.res as any).requestUrls[0].split('?')[0]
     } catch (e) {
       console.log('err', e)
+    }
+  }
+
+  async downloadFile(filename: string, savePath: string) {
+    try {
+      const result = await this.client.getStream(filename)
+      const writeStream = fs.createWriteStream(savePath)
+      result.stream.pipe(writeStream)
+    } catch (e) {
+      console.log(e)
     }
   }
 

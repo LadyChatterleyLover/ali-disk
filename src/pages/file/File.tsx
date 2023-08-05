@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { FileItem } from '@/types/file'
 import api from '@/api'
-import FileList from '@/components/file/FileList'
+import FileTable from '@/components/file/FileTable'
 import FileEmpty from '@/components/file/FileEmpty'
 import ActionButton from '@/components/file/ActionButton'
 
@@ -23,9 +23,12 @@ const File = () => {
     getFileList()
   }, [])
   return (
-    <div className='h-full'>
+    <div className="h-full">
       {fileList.length ? (
-        <FileList fileList={fileList} getFileList={getFileList} />
+        <FileTable
+          fileList={fileList}
+          getFileList={getFileList}
+        />
       ) : (
         <FileEmpty getFileList={getFileList} />
       )}

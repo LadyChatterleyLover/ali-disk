@@ -26,6 +26,12 @@ export class File {
   url: string
 
   @Column({ default: 0 })
+  width: number
+
+  @Column({ default: 0 })
+  height: number
+
+  @Column({ default: 0 })
   isDir: number
 
   @Column({ default: 0 })
