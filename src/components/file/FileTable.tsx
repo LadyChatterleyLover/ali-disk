@@ -210,7 +210,7 @@ const FileTable = (props: Props) => {
   }
 
   const rowClassName = (record: FileItem) => {
-    return record.checked ? 'bg-[#ecefff]' : ''
+    return record.checked ? 'bg-[#ecefff]' : 'cursor-pointer'
   }
 
   // 右键菜单点击事件处理函数

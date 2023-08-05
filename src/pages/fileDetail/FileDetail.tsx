@@ -1,12 +1,15 @@
-import { FileItem } from '@/types/file'
-import { ArrowLeftOutlined, ArrowRightOutlined, LeftOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import DocViewer, { PDFRenderer, TXTRenderer } from 'react-doc-viewer'
+import axios from 'axios'
+import { FileItem } from '@/types/file'
+import { ArrowLeftOutlined, ArrowRightOutlined, LeftOutlined } from '@ant-design/icons'
 import { ZoomOut16Regular, ZoomIn16Regular } from '@ricons/fluent'
 import CcIcon from '@/components/icon/CcIcon'
 import { Button, Divider, Tooltip } from 'antd'
 import { useFormatFileSize } from '@/hooks/useFormatFileSize'
 import DownloadModal from '@/components/file/DownloadModal'
+import { plainType } from '@/const'
 
 const FileDetail = () => {
   const navigate = useNavigate()
@@ -14,10 +17,23 @@ const FileDetail = () => {
   const fileList = (location.state.fileList as FileItem[]).filter(item => item.isDir === 0)
   const [currentIndex, setCurrentIndex] = useState(-1)
   const [downloadVisible, setDownloadVisible] = useState(false)
+  const [content, setContent] = useState('')
   let [size, setSize] = useState(100)
 
   useEffect(() => {
-    setCurrentIndex(fileList.findIndex(item => item.id === location.state.item.id))
+    const currentIndex = fileList.findIndex(item => item.id === location.state.item.id)
+    const item = fileList[currentIndex]
+    axios
+      .get(item.url, {
+        responseType: 'text',
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+        },
+      })
+      .then(res => {
+        setContent(res.data)
+      })
+    setCurrentIndex(currentIndex)
   }, [])
 
   const renderContent = () => {
@@ -30,6 +46,26 @@ const FileDetail = () => {
           height={fileList[currentIndex]?.height! * (size / 100)}
           alt=""
         />
+      )
+    } else if (item.ext === 'txt') {
+      return (
+        <DocViewer
+          pluginRenderers={[TXTRenderer]}
+          documents={[
+            {
+              uri: item.url,
+            },
+          ]}></DocViewer>
+      )
+    } else if (item.ext === 'pdf') {
+      return (
+        <DocViewer
+          pluginRenderers={[PDFRenderer]}
+          documents={[
+            {
+              uri: item.url,
+            },
+          ]}></DocViewer>
       )
     } else if (item.type === 'other') {
       return (
