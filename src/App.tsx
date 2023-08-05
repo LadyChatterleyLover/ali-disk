@@ -16,6 +16,7 @@ import Share from './pages/share/Share'
 import QuickUpload from './pages/quickUpload/QuickUpload'
 import UploadFile from './pages/uploadFile/UploadFile'
 import DownloadFile from './pages/downloadFile/DownloadFile'
+import FileDetail from './pages/fileDetail/FileDetail'
 
 const Routes = () => {
   const routes = useRoutes([
@@ -30,6 +31,10 @@ const Routes = () => {
         {
           path: '/',
           element: <File />,
+        },
+        {
+          path: '/fileDetail',
+          element: <FileDetail />,
         },
         {
           path: '/information',
@@ -92,7 +97,9 @@ const Routes = () => {
 
 const App = () => {
   return (
-    <ConfigProvider locale={zh_CN} theme={{ token: { colorPrimary: '#637dff' } }}>
+    <ConfigProvider
+      locale={zh_CN}
+      theme={{ token: { colorPrimary: '#637dff' } }}>
       <BrowserRouter>
         <Routes />
       </BrowserRouter>

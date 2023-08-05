@@ -4,6 +4,7 @@ export interface FileItem {
   id?: number
   name: string
   ext: string
+  type: string
   url: string
   width: number
   height: number

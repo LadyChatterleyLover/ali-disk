@@ -14,6 +14,7 @@ import zipImg from '../../assets/zip.png'
 import ActionPopover from './ActionPopover'
 import FileHeader from './FileHeader'
 import FileList from '@/components/file/FileList'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {
   fileList: FileItem[]
@@ -21,6 +22,7 @@ interface Props {
 }
 
 const FileTable = (props: Props) => {
+  const navigate = useNavigate()
   const { fileList, getFileList } = props
   const [cloneFileList, setCloneFileList] = useState<FileItem[]>([])
   const [selectList, setSelectList] = useState<FileItem[]>([])
@@ -275,7 +277,19 @@ const FileTable = (props: Props) => {
             rowClassName={rowClassName}
             onRow={(record, index) => ({
               onContextMenu: e => handleRowContextMenu(record, e),
-              onClick: () => handleRowClick(record, index as number),
+              onClick: e => {
+                e.preventDefault()
+                handleRowClick(record, index as number)
+              },
+              onDoubleClick: e => {
+                e.preventDefault()
+                navigate('/fileDetail', {
+                  state: {
+                    item: record,
+                    fileList: cloneFileList,
+                  },
+                })
+              },
             })}
           />
           {menuVisible && (

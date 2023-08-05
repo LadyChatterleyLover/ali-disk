@@ -7,12 +7,14 @@ import excelImg from '../../assets/excel.png'
 import docxImg from '../../assets/docx.png'
 import videoImg from '../../assets/video.png'
 import zipImg from '../../assets/zip.png'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {
   fileList: FileItem[]
 }
 
 const FileList = (props: Props) => {
+  const navigate = useNavigate()
   const { fileList } = props
 
   const renderRow = (row: FileItem) => {
@@ -115,7 +117,15 @@ const FileList = (props: Props) => {
         return (
           <div
             key={item.id}
-            className="flex flex-col items-center justify-center p-2 w-[20%]">
+            className="flex flex-col items-center justify-center p-2 w-[20%]"
+            onDoubleClick={() => {
+              navigate('/fileDetail', {
+                state: {
+                  item,
+                  fileList: fileList,
+                },
+              })
+            }}>
             {renderRow(item)}
             <div className="my-3">{item.name}</div>
             <div className="text-xs text-[#25262b5b]">

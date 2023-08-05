@@ -21,11 +21,13 @@ const Layouts = () => {
   return (
     <App>
       <Layout style={{ minHeight: '100vh' }}>
-        <Sider width={248} theme='light'>
+        <Sider
+          width={248}
+          theme="light">
           <NavSider />
         </Sider>
         <Layout>
-          <Content style={{ background: '#fff', padding: 20 }}>
+          <Content style={{ background: '#fff' }}>
             <Outlet />
           </Content>
         </Layout>
