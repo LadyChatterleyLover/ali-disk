@@ -4,18 +4,56 @@ import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ZoomOut16Regular, ZoomIn16Regular } from '@ricons/fluent'
 import CcIcon from '@/components/icon/CcIcon'
-import { Divider, Tooltip } from 'antd'
+import { Button, Divider, Tooltip } from 'antd'
+import { useFormatFileSize } from '@/hooks/useFormatFileSize'
+import DownloadModal from '@/components/file/DownloadModal'
 
 const FileDetail = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const fileList = (location.state.fileList as FileItem[]).filter(item => item.isDir === 0)
   const [currentIndex, setCurrentIndex] = useState(-1)
+  const [downloadVisible, setDownloadVisible] = useState(false)
   let [size, setSize] = useState(100)
 
   useEffect(() => {
     setCurrentIndex(fileList.findIndex(item => item.id === location.state.item.id))
   }, [])
+
+  const renderContent = () => {
+    const item = fileList[currentIndex]
+    if (item.type === 'image') {
+      return (
+        <img
+          src={fileList[currentIndex]?.url}
+          width={fileList[currentIndex]?.width! * (size / 100)}
+          height={fileList[currentIndex]?.height! * (size / 100)}
+          alt=""
+        />
+      )
+    } else if (item.type === 'other') {
+      return (
+        <div className="flex flex-col justify-center items-center">
+          <img
+            width={92}
+            height={92}
+            src="	https://img.alicdn.com/imgextra/i2/O1CN01ROG7du1aV18hZukHC_!!6000000003334-2-tps-140-140.png"
+            alt=""
+          />
+          <div className="text-sm font-bold my-3">{item.name}</div>
+          <div className="text-[#25262b5b] text-xs">暂不支持在线预览，我们会持续优化，敬请期待</div>
+          <div className="mt-8">
+            <Button
+              type="primary"
+              onClick={() => setDownloadVisible(true)}>
+              下载 {useFormatFileSize(item.size)}
+            </Button>
+          </div>
+        </div>
+      )
+    }
+    return null
+  }
 
   return fileList.length && currentIndex >= 0 ? (
     <>
@@ -89,14 +127,11 @@ const FileDetail = () => {
           <Divider type="vertical" />
         </div>
       </div>
-      <div className="w-full h-full flex justify-center items-center">
-        <img
-          src={fileList[currentIndex]?.url}
-          width={fileList[currentIndex]?.width! * (size / 100)}
-          height={fileList[currentIndex]?.height! * (size / 100)}
-          alt=""
-        />
-      </div>
+      <div className="w-full h-[65%] flex justify-center items-center">{renderContent()}</div>
+      <DownloadModal
+        item={fileList[currentIndex]}
+        visible={downloadVisible}
+        close={() => setDownloadVisible(false)}></DownloadModal>
     </>
   ) : null
 }

@@ -7,16 +7,24 @@ import ActionButton from '@/components/file/ActionButton'
 
 const File = () => {
   const [fileList, setFileList] = useState<FileItem[]>([])
+  const [loading, setLoading] = useState(false)
 
   const getFileList = () => {
-    api.file.getFileList().then(res => {
-      if (res.code === 200) {
-        res.data.map(item => {
-          item.checked = false
-        })
-        setFileList(res.data)
-      }
-    })
+    setLoading(true)
+    api.file
+      .getFileList()
+      .then(res => {
+        if (res.code === 200) {
+          res.data.map(item => {
+            item.checked = false
+          })
+          setFileList(res.data)
+        }
+        setLoading(false)
+      })
+      .catch(() => {
+        setLoading(false)
+      })
   }
 
   useEffect(() => {
@@ -26,6 +34,7 @@ const File = () => {
     <div className="h-full p-5">
       {fileList.length ? (
         <FileTable
+          loading={loading}
           fileList={fileList}
           getFileList={getFileList}
         />

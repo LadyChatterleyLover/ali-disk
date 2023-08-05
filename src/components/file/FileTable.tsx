@@ -17,13 +17,14 @@ import FileList from '@/components/file/FileList'
 import { useNavigate } from 'react-router-dom'
 
 interface Props {
+  loading: boolean
   fileList: FileItem[]
   getFileList: () => void
 }
 
 const FileTable = (props: Props) => {
   const navigate = useNavigate()
-  const { fileList, getFileList } = props
+  const { fileList, getFileList, loading } = props
   const [cloneFileList, setCloneFileList] = useState<FileItem[]>([])
   const [selectList, setSelectList] = useState<FileItem[]>([])
   const [currentItem, setCurrentItem] = useState<FileItem>()
@@ -275,6 +276,7 @@ const FileTable = (props: Props) => {
             dataSource={cloneFileList}
             pagination={false}
             rowClassName={rowClassName}
+            loading={loading}
             onRow={(record, index) => ({
               onContextMenu: e => handleRowContextMenu(record, e),
               onClick: e => {
